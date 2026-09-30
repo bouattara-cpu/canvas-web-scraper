@@ -1,94 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Canvas Assignments</title>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .card { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
-    .active { border-left: 5px solid green; }
-    .past { border-left: 5px solid gray; }
-    button { margin-right: 5px; padding: 5px 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALU Canvas - Assignments Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Canvas Assignments</h1>
+    <aside class="sidebar">
+        <div class="logo-area">
+            <h2>ALU</h2>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-item"><i class="fa-solid fa-user"></i><span>Account</span></a>
+            <a href="#" class="nav-item active"><i class="fa-solid fa-gauge"></i><span>Dashboard</span></a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-book"></i><span>Courses</span></a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-calendar-days"></i><span>Calendar</span></a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-inbox"></i><span>Inbox</span></a>
+        </nav>
+    </aside>
 
-<input type="file" id="fileInput" accept=".json">
-<br><br>
+    <main class="main-content">
+        <header class="top-header">
+            <h1>Frontend Web Development - Assignments</h1>
+            <button id="load-data-btn" class="btn-primary">
+                <i class="fa-solid fa-rotate"></i> Load Assignments
+            </button>
+        </header>
 
-<button id="allBtn">All</button>
-<button id="activeBtn">Active</button>
-<button id="pastBtn">Past</button>
-<button id="downloadBtn">Download JSON</button>
+        <div class="dashboard-container">
+            <!-- Assignments Grid Section -->
+            <section class="assignments-section">
+                <h2>Assignment List</h2>
+                <div id="assignments-grid" class="grid">
+                    <p class="placeholder-text">Click "Load Assignments" to display the scraped data.</p>
+                </div>
+            </section>
 
-<div id="output"></div>
+            
+            <aside class="todo-aside">
+                <h3>To Do</h3>
+                <div class="todo-card">
+                    <p class="todo-title">Web Scraper Activity</p>
+                    <span class="todo-date">Due Today at 11:59pm</span>
+                </div>
+                <div class="todo-card">
+                    <p class="todo-title">Frontend Quiz Preparation</p>
+                    <span class="todo-date">Tomorrow morning</span>
+                </div>
+            </aside>
+        </div>
+    </main>
 
-<script>
-let assignments = [];
-let currentFilter = 'all';
-
-// Load the JSON file the student picks
-$('#fileInput').change(function (event) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    assignments = JSON.parse(e.target.result);
-    showAssignments();
-  };
-  reader.readAsText(file);
-});
-
-// Draw the cards on the page based on the current filter
-function showAssignments() {
-  $('#output').empty();
-
-  let filtered = assignments;
-  if (currentFilter === 'active') {
-    filtered = assignments.filter(a => a.timeline === 'active');
-  } else if (currentFilter === 'past') {
-    filtered = assignments.filter(a => a.timeline === 'past');
-  }
-
-  filtered.forEach(function (a) {
-    const card = $('<div class="card"></div>');
-    card.addClass(a.timeline);
-    card.append('<h3>' + a.title + '</h3>');
-    card.append('<p>Due: ' + a.dueDate + '</p>');
-    card.append('<p>Status: ' + a.status + '</p>');
-    card.append('<p>Points: ' + a.points + '</p>');
-    card.append('<p>' + a.description + '</p>');
-    $('#output').append(card);
-  });
-}
-
-$('#allBtn').click(function () {
-  currentFilter = 'all';
-  showAssignments();
-});
-
-$('#activeBtn').click(function () {
-  currentFilter = 'active';
-  showAssignments();
-});
-
-$('#pastBtn').click(function () {
-  currentFilter = 'past';
-  showAssignments();
-});
-
-// Bonus: download whatever is currently loaded as a JSON snapshot
-$('#downloadBtn').click(function () {
-  const dataStr = JSON.stringify(assignments, null, 2);
-  const blob = new Blob([dataStr], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'assignments_snapshot.json';
-  link.click();
-});
-</script>
-
+    <script src="app.js"></script>
 </body>
 </html>
